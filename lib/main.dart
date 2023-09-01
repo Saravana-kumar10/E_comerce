@@ -10,6 +10,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
+import 'Description.dart';
 import 'model/Dependencies.dart';
 
 
@@ -71,27 +72,12 @@ class MyApp extends StatelessWidget {
               ),
 
             ),
-            
-            // Positioned(
-            //   bottom: 50,
-            //   child: AnimatedTextKit(
-            //   animatedTexts: [
-            //
-            //     WavyAnimatedText("Easy Shopping",textStyle: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,
-            //
-            //      )),
-            //
-            //
-            //   ],
-            //   isRepeatingAnimation: true,
-            //   totalRepeatCount: 100,
-            //   stopPauseOnTap: true,
-            //
-            // ),
-            // )
+
+
+
             ]
           ),
-          nextScreen:Navi(),
+          nextScreen: Pageone(),
           splashTransition: SplashTransition.sizeTransition,
           pageTransitionType: PageTransitionType.fade,
 

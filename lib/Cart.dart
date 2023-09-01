@@ -18,8 +18,7 @@ class Cart extends StatefulWidget {
   final String title;
   final String price;
   final String id;
-  Cart({super.key,
-  required this.image,required this.title,required this.price,required this.id});
+ Cart({super.key, required this.image,required this.title,required this.price,required this.id});
 
 
   @override
@@ -28,7 +27,7 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   late int val;
- late bool adval;
+
   List Itemlist=[];
   late SharedPreferences logindata ;
   late bool logbool = false  ;
@@ -63,42 +62,8 @@ class _CartState extends State<Cart> {
 
   }
   @override
-  void initState(){
-
-    super.initState();
-
-    // check();
 
 
-    adval= widget.image.isEmpty ? false:true;
-}
-  void _addCardWidget() {
-
-
-    setState(() {
-      Itemlist.insert(0,ListTile(
-
-        leading: Container(
-          height: 60,
-          width: 80,
-          child: Image.network(widget.image,fit: BoxFit.fill,),
-        ),
-        title: Text(widget.title,style: TextStyle(fontSize: 20),),
-        subtitle: Text(
-          " ${widget.price}\n""Product id :${widget.id}",style: TextStyle(fontSize: 20),),
-        trailing: IconButton(onPressed: (){
-          setState(() {
-            Itemlist.removeAt(val);
-          });
-        }, icon: Icon(Icons.minimize)),
-
-
-      ));
-
-    });
-
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,104 +76,46 @@ class _CartState extends State<Cart> {
         }, icon: Icon(Icons.arrow_back)),
         title: Text("My Cart"),
       ),
-      body:Container(
-        height: double.infinity,
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed:() {
-                        _addCardWidget();
-
-    },
-
-                      child: Icon(Icons.add),
-                    ),
-                    SizedBox(width: 20,),
-
-
-                  ],
-                ),
-               Visibility(
-                 visible: adval,
-                 child: Container(height: 100,width: double.infinity,
-                   child: ListTile(
-                      leading: Container(
-                        height: 60,
-                        width: 80,
-                        child: Image.network(widget.image,fit: BoxFit.fill,),
-                      ),
-                      title: Text(widget.title,style: TextStyle(fontSize: 20),),
-                      subtitle: Text(
-                        " ${widget.price}\n"
-                            "Product id :${widget.id}",style: TextStyle(fontSize: 20),),
-
-
-
-                    ),
-                 ),
-               ),
-
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: SizedBox(height: 900,width: 400,
-                    child: ListView.builder(
-                        itemCount: Itemlist.length,
-                        itemBuilder: (context , index){
-                          val=index;
-                      return Itemlist[index];
-                    }),
-                  ),
-                ),
-
-
-
-
-
-              ],
-            ),
+      body: Container(
+        height: 100, width: double.infinity,
+        child: ListTile(
+          leading: Container(
+            height: 60,
+            width: 80,
+            child: Image.network(
+              widget.image, fit: BoxFit.fill,),
           ),
+          title: Text(
+            widget.title, style: TextStyle(fontSize: 20),),
+          subtitle: Text(
+            " ${widget.price}\n"
+                "Product id :${widget.id}",
+            style: TextStyle(fontSize: 20),),
+
+
         ),
       ),
+      // Container(
+      //   height: double.infinity,
+      //   width: double.infinity,
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(8.0),
+      //     child: ListView.builder(
+      //       itemCount: Itemlist.length,
+      //       itemBuilder: (BuildContext context, int index) {
+      //         return
+      //
+      //
+      //       },
+      //     ),
+      //   ),
+      // ),
     );
   }
 
 
 
-  ListTile Lisadd()
-  {
-    if(widget.image.isEmpty || widget.image==widget.image){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Pageone()
-      ));
 
-
-    }
-
-    return  ListTile(
-
-      leading: Container(
-        height: 60,
-        width: 80,
-        child: Image.network(widget.image,fit: BoxFit.fill,),
-      ),
-      title: Text(widget.title,style: TextStyle(fontSize: 20),),
-      subtitle: Text(
-        " ${widget.price}\n""Product id :${widget.id}",style: TextStyle(fontSize: 20),),
-      trailing: IconButton(onPressed: (){
-        setState(() {
-          Itemlist.removeAt(val);
-        });
-      }, icon: Icon(Icons.minimize)),
-
-
-    );
-
-  }
 }
 
 

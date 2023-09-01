@@ -36,6 +36,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
     return data.map((e) =>CheckImg.fromJson(e)).toList();
   }
+  List crtitem=[];
 
   @override
   void initState() {
@@ -163,10 +164,11 @@ class _DetailsPageState extends State<DetailsPage> {
                         height: 70,
                         width: 200,
                         child: ElevatedButton(onPressed: (){
+                               setState(() {
+                                 crtitem.add({widget.image,widget.title,widget.price,widget.id});
+                               });
 
-
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Cart(image:widget.image ,title:widget.title,price: widget.price,id: widget.id,)
-                          ));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Cart(image:widget.image ,title:widget.title,price: widget.price,id: widget.id,)));
                         }, child: Text("ADD TO CART",style: TextStyle(fontSize: 20,color: Colors.black),),
                           style: ElevatedButton.styleFrom(primary: Colors.red),)),
                     Spacer(),
@@ -276,3 +278,4 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 }
+
