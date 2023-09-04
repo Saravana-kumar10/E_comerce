@@ -1,13 +1,15 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:e_comercesara/Cart.dart';
 
 import 'package:e_comercesara/navigation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'Imagetransition.dart';
 class Login extends StatefulWidget {
@@ -23,6 +25,8 @@ class _LoginState extends State<Login> {
   final gkey= GlobalKey<FormState>();
   TextEditingController txtpwd =new TextEditingController();
   TextEditingController txtlog =new TextEditingController();
+  TextEditingController txtname =new TextEditingController();
+  TextEditingController txtphone =new TextEditingController();
   TextEditingController pwd =new TextEditingController();
   TextEditingController rpwd =new TextEditingController();
   Color grey= Colors.grey;
@@ -202,10 +206,8 @@ class _LoginState extends State<Login> {
                                      child: ElevatedButton(onPressed: () {
                                        if(gkey.currentState!.validate())
                                        {
-                                         // logindata.setBool("login", false);
-                                         Navigator.pushReplacement(context,
-                                             PageTransition(child: const Navi(), type: PageTransitionType.fade));
 
+                                        login();
 
                                          ScaffoldMessenger.of(context).showSnackBar(
 
@@ -280,7 +282,7 @@ class _LoginState extends State<Login> {
                                    Padding(
                                      padding: const EdgeInsets.all(10.0),
                                      child: TextFormField(
-                                         controller: txtlog,
+                                         controller: txtname,
 
 
                                          decoration: InputDecoration(
@@ -346,7 +348,7 @@ class _LoginState extends State<Login> {
                                    Padding(
                                      padding: const EdgeInsets.all(10.0),
                                      child: TextFormField(
-                                         controller: txtpwd,
+                                         controller: txtphone,
                                          maxLines: 1,
                                          keyboardType: TextInputType.visiblePassword,
                                          decoration: InputDecoration(
@@ -378,7 +380,7 @@ class _LoginState extends State<Login> {
                                    Padding(
                                      padding: const EdgeInsets.all(10.0),
                                      child: TextFormField(
-                                         controller: txtpwd,
+                                         controller: pwd,
                                          maxLines: 1,
                                          keyboardType: TextInputType.visiblePassword,
                                          decoration: InputDecoration(
@@ -410,7 +412,7 @@ class _LoginState extends State<Login> {
                                    Padding(
                                      padding: const EdgeInsets.all(10.0),
                                      child: TextFormField(
-                                         controller: txtpwd,
+                                         controller: rpwd,
                                          maxLines: 1,
                                          keyboardType: TextInputType.visiblePassword,
                                          decoration: InputDecoration(
@@ -443,20 +445,21 @@ class _LoginState extends State<Login> {
                                      child: ElevatedButton(onPressed: () {
                                        if(gkey.currentState!.validate())
                                        {
-                                         //logindata.setBool("login", false);
+                                      signup(txtname.text, txtlog.text, txtphone.text,txtpwd.text);
 
 
-                                         ScaffoldMessenger.of(context).showSnackBar(
+                                         // ScaffoldMessenger.of(context).showSnackBar(
+                                         //
+                                         //   const SnackBar(content: Text('Welcome Enjoy ur Day',style: TextStyle(color: Colors.white,fontSize: 20),)),
+                                         //
 
-                                           const SnackBar(content: Text('Welcome Enjoy ur Day',style: TextStyle(color: Colors.white,fontSize: 20),)),
-
-
-                                         );}
-                                       txtlog.clear();
-                                       txtpwd.clear();
+                                       //  );
+                                       }
+                                       //txtlog.clear();
+                                       //txtpwd.clear();
 
                                      },
-                                       child: const Center(child: Text("Log In",style: TextStyle(fontSize: 20,color: Colors.white60),)),
+                                       child: const Center(child: Text("sign up",style: TextStyle(fontSize: 20,color: Colors.white60),)),
                                        style: ElevatedButton.styleFrom(backgroundColor: Colors.black.withOpacity(.5),),
                                      ),
                                    ),
@@ -490,25 +493,46 @@ class _LoginState extends State<Login> {
     );
   }
 
+  Future<void>login()async{
+    try{
+      final _auth = FirebaseAuth.instance;
+      _auth.signInWithEmailAndPassword(
+          email: txtlog.text, password: txtpwd.text);
+    }on FirebaseAuthException catch (e){
+      print(e);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message!),
+            backgroundColor: Colors.red[300],)
+      );
+    }
+  }
+  Future<void>signup(String name,String emailid,String phonenum,String password)async{
+    try{
+      final auth = FirebaseAuth.instance;
+      auth.createUserWithEmailAndPassword(
+          email: txtlog.text, password: txtpwd.text);
+    }on FirebaseAuthException catch (e){
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("something wwrong"),
+            backgroundColor: Colors.red[300],)
+      );
+    }
+
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final adddata=FirebaseFirestore.instance.collection('users').doc(uid);
+    final json={
+      "name":name,
+     "emailid":emailid,
+      "monilenum":phonenum,
+      "password":password
+    };
+    await adddata.set(json);
+  }
 
 
 
-  // void log_check() async{
-  //   logindata= await SharedPreferences.getInstance();
-  //   logbool= logindata.getBool("login")??true;
-  //   if(logbool==false)
-  //   {
-  //     Navigator.pushReplacement(context,
-  //         PageTransition(child:  Navi(), type: PageTransitionType.fade));
-  //   }
-  //
-  //
-  // }
-  // void dispose()
-  // {
-  // // logindata.remove("login");
-  // super.dispose();
-  // }
 
 
 

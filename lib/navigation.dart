@@ -23,7 +23,7 @@ class _NaviState extends State<Navi> {
 ///internet connection
   late ConnectivityResult result;
   late StreamSubscription subscription;
-  var isConnected=false;
+  var isConnected=true;
 
   @override
   void initState(){

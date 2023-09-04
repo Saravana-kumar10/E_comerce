@@ -1,7 +1,8 @@
 import 'package:e_comercesara/Login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -10,14 +11,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  late SharedPreferences logindata;
+
   late bool logb;
-  void intial() async {
-    logindata = await SharedPreferences.getInstance();
-  }
+
   void initState(){
     super.initState();
-    intial();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -150,11 +149,10 @@ class _ProfileState extends State<Profile> {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        logindata.setBool("login", true);
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(childCurrent: Profile(),child: Login(), type: PageTransitionType.fade,duration: Duration(milliseconds: 900)),
-                                        );
+
+
+                                        FirebaseAuth.instance.signOut();
+                                        Navigator.of(context).pop();
                                       }, // <-- SEE HERE
                                       child: new Text('Yes',style: TextStyle(color: Theme.of(context).colorScheme.onSurface),),
                                     ),

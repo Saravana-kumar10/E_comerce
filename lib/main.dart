@@ -1,22 +1,30 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:e_comercesara/Cart.dart';
+import 'package:e_comercesara/Login.dart';
 import 'package:e_comercesara/Page0ne.dart';
 import 'package:e_comercesara/Profile.dart';
 import 'package:e_comercesara/navigation.dart';
 import 'package:e_comercesara/youtubeplayer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
-import 'Description.dart';
-import 'model/Dependencies.dart';
+
+import 'firebase_options.dart';
 
 
 
 
-void main() {
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(const MyApp());
 
@@ -77,7 +85,18 @@ class MyApp extends StatelessWidget {
 
             ]
           ),
-          nextScreen: Pageone(),
+          nextScreen: StreamBuilder<User?>(
+            stream:FirebaseAuth.instance.authStateChanges() ,
+            builder: (context,AsyncSnapshot<User?> snapshot){
+              if(snapshot.hasData && snapshot.data !=null){
+                return  Navi();
+              }
+              else if(snapshot.connectionState == ConnectionState.waiting){
+                return Center(child: CircularProgressIndicator());
+              }
+              return Login();
+            },
+          ),
           splashTransition: SplashTransition.sizeTransition,
           pageTransitionType: PageTransitionType.fade,
 

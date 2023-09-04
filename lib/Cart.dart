@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 import 'Description.dart';
 import 'model/CateClass.dart';
@@ -29,8 +29,8 @@ class _CartState extends State<Cart> {
   late int val;
 
   List Itemlist=[];
-  late SharedPreferences logindata ;
-  late bool logbool = false  ;
+
+
   Future<List<CheckImg>> addImgdetails() async{
     var res=await http.get(Uri.parse("https://fakestoreapi.com/products"));
     List data=jsonDecode(res.body);
@@ -38,30 +38,6 @@ class _CartState extends State<Cart> {
     return data.map((e) =>CheckImg.fromJson(e)).toList();
   }
 
-  void check() async
-  {
-    logindata = await SharedPreferences.getInstance();
-    // logindata.setBool("login", true);
-    // if(logindata.containsKey("login") )
-    //   {
-    //
-    //     logbool = true;
-    //   }
-    // else
-    //   {
-    //     logbool = false;
-    //   }
-
-    logbool= logindata.containsKey("login") ?? false;
-    // if(logbool==true)
-    // {
-    //   Navigator.pushReplacement(context,
-    //       PageTransition(child: const Login(), type: PageTransitionType.fade));
-    // }
-
-
-  }
-  @override
 
 
 

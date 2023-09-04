@@ -48,12 +48,15 @@ dependencies:
   google_fonts: ^5.1.0
   flutter_rating_bar: ^4.0.1
   number_inc_dec: ^0.8.0
-  shared_preferences: ^2.1.2
   youtube_player_flutter: ^8.1.2
   internet_connection_checker: ^1.0.0+1
   connectivity_plus: ^4.0.2
   get: ^4.6.5
   animated_text_kit: ^4.2.2
+  firebase_core: ^2.15.1
+  firebase_auth: ^4.9.0
+  cloud_firestore: ^4.9.1
+
 
 
 
