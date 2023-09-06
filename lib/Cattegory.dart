@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_comercesara/model/CateClass.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+
+import 'navigation.dart';
 class Category extends StatefulWidget {
   const Category({super.key});
 
@@ -9,6 +13,32 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
+
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
+  List<Map<String,dynamic>> items =[];
+  List catId =[];
+
+  Future getCatId() async {
+    List<Map<String,dynamic>> tempList =[];
+    var data =await FirebaseFirestore.instance.collection('users').doc(uid).collection('products').get();
+    await FirebaseFirestore.instance.collection('users').doc(uid).collection('products').get()
+        .then((snapshot) =>snapshot.docs.forEach((element) {
+      catId.add(element.reference.id);
+      print(element.reference.id);
+
+    }) );
+
+
+
+    data.docs.forEach((element) {
+      tempList.add(element.data());
+    });
+    setState(() {
+      items=tempList;
+      print(items);
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,27 +55,38 @@ class _CategoryState extends State<Category> {
             height: MediaQuery.of(context).size.height,
             width: 100,
             color: Colors.grey.withOpacity(.1),
-            child:ListView.builder(
-                  itemCount: 100,
-                  itemBuilder:(context, index)
-                  {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
+            child: FutureBuilder(
+                future: getCatId(),
+                builder: (context,snapshot) {
+
+                    return ListView.builder(
+                        itemCount: items.length,
+                        itemBuilder: (context,index) {
+                          return
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
 
 
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundImage:AssetImage("asset/vg.JPG"),
+                                  CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage:NetworkImage(items[index]['image'].toString()),
 
-                          ),
-                          Text("data")
-                        ],
-                      ),
+                                  ),
+                                  Text(items[index]['category'].toString())
+                                ],
+                              ),
+                            );
+
+
+                        }
                     );
-                  }
-              ),
+
+
+
+                }
+            ),
 
 
             ),
